@@ -1,0 +1,7 @@
+{
+  "name": "ClinicJobs",
+  "description": "Uma plataforma moderna conectando dentistas a clínicas odontológicas, permitindo que profissionais exibam seus portfólios e clínicas mostrem sua infraestrutura.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
