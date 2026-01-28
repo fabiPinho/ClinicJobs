@@ -35,12 +35,36 @@ const MOCK_CANDIDATES: Candidate[] = [
     portfolio: [{ id: 'p1', title: 'Atendimento Lúdico', description: 'Técnica de manejo', imageUrl: 'https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&q=80&w=400' }],
     experiences: [
       { id: 'e1', clinicName: 'Sorriso Kids', role: 'Odontopediatra', period: '2018 - 2022', description: 'Responsável pelo setor de prevenção e tratamentos complexos em sedação consciente.' },
-      { id: 'e2', clinicName: 'Clínica Bem Estar', role: 'Clínico Geral', period: '2016 - 2018', description: 'Atendimento clínico geral with foco em estética.' }
+      { id: 'e2', clinicName: 'Clínica Bem Estar', role: 'Clínico Geral', period: '2016 - 2018', description: 'Atendimento clínico geral com foco em estética.' }
     ],
     reviews: [
       { id: 'r1', clinicName: 'Sorriso Kids', rating: 5, comment: 'Excelente profissional, pontual e muito técnica.', date: 'Há 3 meses' },
-      { id: 'r2', clinicName: 'Clínica Bem Estar', rating: 4.8, comment: 'Dra Ana é fantástica com as crianças, recomendo muito.', date: 'Há 1 ano' }
+      { id: 'r2', clinicName: 'Clínica Bem Estar', rating: 4.8, comment: 'Dra Ana é fantástica com as crianças, recoemndo muito.', date: 'Há 1 ano' }
     ]
+  },
+  {
+    id: '2',
+    name: 'Dr. Lucas Mendes',
+    specialty: 'Ortodontia',
+    exp: '5 anos',
+    rating: 4.7,
+    avatar: 'https://i.pravatar.cc/150?u=lucas',
+    bio: 'Especialista em Ortodontia Digital e Invisalign.',
+    portfolio: [],
+    experiences: [],
+    reviews: []
+  },
+  {
+    id: '3',
+    name: 'Dra. Julia Silveira',
+    specialty: 'Implantodontia',
+    exp: '12 anos',
+    rating: 5.0,
+    avatar: 'https://i.pravatar.cc/150?u=julia',
+    bio: 'Foco em reabilitações complexas e carga imediata.',
+    portfolio: [],
+    experiences: [],
+    reviews: []
   }
 ];
 
@@ -55,6 +79,7 @@ const ClinicDashboard: React.FC = () => {
   const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
   const [clinicPhotos, setClinicPhotos] = useState<string[]>([]);
   const [showError, setShowError] = useState(false);
+  const [showFilterOptions, setShowFilterOptions] = useState(false);
 
   const completionStats = useMemo(() => {
     const checks = {
@@ -73,6 +98,11 @@ const ClinicDashboard: React.FC = () => {
       isComplete: completed === total
     };
   }, [clinicDescription, clinicPhotos, bairro, paymentValue, selectedSpecialties, workDays]);
+
+  const filteredCandidates = useMemo(() => {
+    if (selectedSpecialties.length === 0) return MOCK_CANDIDATES;
+    return MOCK_CANDIDATES.filter(c => selectedSpecialties.includes(c.specialty));
+  }, [selectedSpecialties]);
 
   const toggleSpecialty = (s: string) => {
     if (selectedSpecialties.includes(s)) {
@@ -154,14 +184,14 @@ const ClinicDashboard: React.FC = () => {
                   <h3 className="text-2xl font-black text-slate-900 tracking-tight">Experiência Publicada</h3>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {selectedCandidate.experiences.map(exp => (
+                  {selectedCandidate.experiences.length > 0 ? selectedCandidate.experiences.map(exp => (
                     <div key={exp.id} className="p-8 bg-slate-50 rounded-[2rem] border border-slate-100 hover:border-sky-200 transition-colors">
                       <h4 className="text-lg font-bold text-slate-900 mb-1">{exp.role}</h4>
                       <p className="text-sky-600 font-bold text-sm mb-2">{exp.clinicName}</p>
                       <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-4">{exp.period}</p>
                       <p className="text-slate-500 text-sm font-medium leading-relaxed">{exp.description}</p>
                     </div>
-                  ))}
+                  )) : <p className="text-slate-400 font-medium italic">Nenhuma experiência registrada.</p>}
                 </div>
               </div>
             </div>
@@ -257,27 +287,97 @@ const ClinicDashboard: React.FC = () => {
 
         <div className="flex-grow">
           {activeTab === 'talent' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-               {MOCK_CANDIDATES.map(candidate => (
-                 <div key={candidate.id} className="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm hover:shadow-xl hover:shadow-sky-100 transition-all group flex flex-col items-center text-center">
-                   <img src={candidate.avatar} className="w-32 h-32 rounded-[2rem] object-cover mb-4 ring-4 ring-slate-50 group-hover:ring-sky-50 transition-all shadow-md" alt={candidate.name} />
-                   <div className="flex items-center gap-1 text-amber-500 bg-amber-50 px-3 py-1 rounded-xl mb-4">
-                      <Star className="w-4 h-4 fill-current" />
-                      <span className="font-black text-sm">{candidate.rating}</span>
+            <div className="space-y-8 animate-in fade-in duration-500">
+              {/* Filtros Ativos e Botão de Filtro */}
+              <div className="bg-white p-6 rounded-[2rem] border border-slate-200 shadow-sm flex flex-col gap-4">
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="flex items-center gap-2 text-slate-500 font-bold text-sm mr-2">
+                      <Filter className="w-4 h-4 text-sky-600" /> Especialidades:
+                    </div>
+                    {selectedSpecialties.length > 0 ? (
+                      <>
+                        {selectedSpecialties.map(s => (
+                          <span key={s} className="px-3 py-1.5 bg-sky-50 text-sky-600 rounded-xl text-xs font-black flex items-center gap-2 border border-sky-100 animate-in zoom-in-95">
+                            {s}
+                            <button onClick={() => toggleSpecialty(s)} className="hover:text-red-500 transition-colors">
+                              <X className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))}
+                        <button 
+                          onClick={() => setSelectedSpecialties([])}
+                          className="text-slate-400 hover:text-red-500 text-xs font-bold underline decoration-dotted underline-offset-4"
+                        >
+                          Limpar todos
+                        </button>
+                      </>
+                    ) : (
+                      <span className="text-slate-400 text-xs font-medium italic">Todos os profissionais visíveis</span>
+                    )}
+                  </div>
+                  <button 
+                    onClick={() => setShowFilterOptions(!showFilterOptions)}
+                    className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${showFilterOptions ? 'bg-sky-600 text-white shadow-lg' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}
+                  >
+                    <Plus className={`w-4 h-4 transition-transform ${showFilterOptions ? 'rotate-45' : ''}`} />
+                    {showFilterOptions ? 'Fechar Menu' : 'Filtrar por Especialidade'}
+                  </button>
+                </div>
+
+                {showFilterOptions && (
+                  <div className="pt-4 border-t border-slate-100 animate-in slide-in-from-top-2 duration-300">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Selecione até 3 áreas para filtrar:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {SPECIALTIES_LIST.map(s => (
+                        <button 
+                          key={s}
+                          onClick={() => toggleSpecialty(s)}
+                          className={`px-3 py-1.5 rounded-xl border-2 font-bold text-xs transition-all ${selectedSpecialties.includes(s) ? 'bg-sky-600 border-sky-600 text-white shadow-md' : 'bg-white border-slate-100 text-slate-400 hover:border-sky-200'}`}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Grid de Candidatos Filtrados */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                 {filteredCandidates.length > 0 ? filteredCandidates.map(candidate => (
+                   <div key={candidate.id} className="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm hover:shadow-xl hover:shadow-sky-100 transition-all group flex flex-col items-center text-center">
+                     <img src={candidate.avatar} className="w-32 h-32 rounded-[2rem] object-cover mb-4 ring-4 ring-slate-50 group-hover:ring-sky-50 transition-all shadow-md" alt={candidate.name} />
+                     <div className="flex items-center gap-1 text-amber-500 bg-amber-50 px-3 py-1 rounded-xl mb-4">
+                        <Star className="w-4 h-4 fill-current" />
+                        <span className="font-black text-sm">{candidate.rating}</span>
+                     </div>
+                     <h4 className="text-xl font-black text-slate-900">{candidate.name}</h4>
+                     <p className="text-sky-600 font-bold mb-6">{candidate.specialty}</p>
+                     
+                     <div className="flex gap-3 w-full">
+                       <button 
+                        onClick={() => setSelectedCandidate(candidate)}
+                        className="flex-grow py-4 bg-slate-900 text-white font-bold rounded-2xl hover:bg-sky-600 transition-all shadow-lg shadow-slate-200"
+                       >
+                         Ver Perfil Completo
+                       </button>
+                     </div>
                    </div>
-                   <h4 className="text-xl font-black text-slate-900">{candidate.name}</h4>
-                   <p className="text-sky-600 font-bold mb-6">{candidate.specialty}</p>
-                   
-                   <div className="flex gap-3 w-full">
-                     <button 
-                      onClick={() => setSelectedCandidate(candidate)}
-                      className="flex-grow py-4 bg-slate-900 text-white font-bold rounded-2xl hover:bg-sky-600 transition-all"
-                     >
-                       Ver Perfil Completo
-                     </button>
-                   </div>
-                 </div>
-               ))}
+                 )) : (
+                  <div className="col-span-full py-20 bg-white rounded-[2.5rem] border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-center p-10">
+                    <Search className="w-16 h-16 text-slate-200 mb-6" />
+                    <h3 className="text-2xl font-black text-slate-900 mb-2">Nenhum profissional encontrado</h3>
+                    <p className="text-slate-500 font-medium max-w-sm">Tente remover alguns filtros de especialidade para ver mais resultados.</p>
+                    <button 
+                      onClick={() => setSelectedSpecialties([])}
+                      className="mt-6 px-8 py-3 bg-sky-600 text-white font-black rounded-2xl shadow-lg shadow-sky-100 hover:bg-sky-700 transition-all"
+                    >
+                      Ver todos os dentistas
+                    </button>
+                  </div>
+                 )}
+              </div>
             </div>
           )}
 
@@ -288,14 +388,14 @@ const ClinicDashboard: React.FC = () => {
                    <div className="p-3 bg-sky-100 text-sky-600 rounded-2xl">
                     <Tag className="w-6 h-6" />
                    </div>
-                   <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">O que você busca?</h3>
+                   <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">Anunciar Nova Oportunidade</h3>
                 </div>
 
                 <div className="space-y-10">
                   {/* Specialty Multi-select */}
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Escolha até 3 especialidades</label>
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Especialidades Desejadas (até 3)</label>
                       <span className="text-[10px] font-black bg-sky-100 text-sky-600 px-2 py-0.5 rounded-full">{selectedSpecialties.length}/3</span>
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -314,39 +414,54 @@ const ClinicDashboard: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Remuneration */}
                     <div className="space-y-4">
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Sistema de Remuneração</label>
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Modelo de Remuneração</label>
                       <div className="flex gap-2">
                         {[
-                          { id: 'salario', label: 'Fixo', icon: Banknote },
-                          { id: 'diaria', label: 'Diária', icon: CalendarDays },
-                          { id: 'comissao', label: 'Comissão', icon: Percent }
+                          { id: 'salario', label: 'Fixo (CLT)', icon: Banknote, placeholder: 'Ex: R$ 5.000,00' },
+                          { id: 'diaria', label: 'Diária', icon: CalendarDays, placeholder: 'Ex: R$ 450,00' },
+                          { id: 'comissao', label: 'Comissão', icon: Percent, placeholder: 'Ex: 30% ou 40%' }
                         ].map((item) => (
                           <button 
                             key={item.id}
-                            onClick={() => setPaymentType(item.id as any)}
+                            onClick={() => {
+                                setPaymentType(item.id as any);
+                                setPaymentValue(''); // Reseta o valor ao trocar o tipo
+                            }}
                             className={`flex-1 py-4 flex flex-col items-center gap-2 rounded-2xl border-2 font-bold transition-all ${paymentType === item.id ? 'bg-sky-600 border-sky-600 text-white shadow-lg' : 'bg-white border-slate-100 text-slate-400 hover:bg-slate-50'}`}
                           >
                             <item.icon className="w-5 h-5" />
-                            <span className="text-[10px] uppercase">{item.label}</span>
+                            <span className="text-[10px] uppercase text-center">{item.label}</span>
                           </button>
                         ))}
                       </div>
-                      <input 
-                        type="text" 
-                        value={paymentValue}
-                        onChange={(e) => setPaymentValue(e.target.value)}
-                        placeholder="Ex: R$ 450,00 ou 40%"
-                        className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-medium focus:ring-4 focus:ring-sky-500/10 transition-all"
-                      />
+                      <div className="relative">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 font-bold">
+                           {paymentType === 'comissao' ? <Percent className="w-4 h-4" /> : <Banknote className="w-4 h-4" />}
+                        </div>
+                        <input 
+                          type="text" 
+                          value={paymentValue}
+                          onChange={(e) => setPaymentValue(e.target.value)}
+                          placeholder={
+                              paymentType === 'salario' ? 'Ex: R$ 5.000,00' : 
+                              paymentType === 'diaria' ? 'Ex: R$ 600,00 por dia' : 
+                              'Ex: 35% do faturamento'
+                          }
+                          className="w-full p-4 pl-12 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-medium focus:ring-4 focus:ring-sky-500/10 transition-all"
+                        />
+                      </div>
+                      <p className="text-[10px] text-slate-400 italic font-medium ml-1">
+                        * Profissionais priorizam vagas com remuneração clara.
+                      </p>
                     </div>
 
                     {/* Work Days */}
                     <div className="space-y-4">
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Dias por Semana</label>
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Frequência Semanal</label>
                       <div className="bg-slate-50 p-6 rounded-[2rem] border border-slate-100">
                         <div className="flex justify-between items-center mb-4">
                           <span className="text-2xl font-black text-sky-600">{workDays} {workDays === 1 ? 'dia' : 'dias'}</span>
-                          <span className="text-slate-400 font-bold text-xs">Semanal</span>
+                          <span className="text-slate-400 font-bold text-xs">Por Semana</span>
                         </div>
                         <input 
                           type="range" 
@@ -356,6 +471,10 @@ const ClinicDashboard: React.FC = () => {
                           onChange={(e) => setWorkDays(parseInt(e.target.value))}
                           className="w-full h-2 bg-sky-200 rounded-lg appearance-none cursor-pointer accent-sky-600"
                         />
+                        <div className="flex justify-between mt-2 px-1">
+                           <span className="text-[10px] text-slate-400 font-bold">1 dia</span>
+                           <span className="text-[10px] text-slate-400 font-bold">7 dias</span>
+                        </div>
                       </div>
                     </div>
                   </div>

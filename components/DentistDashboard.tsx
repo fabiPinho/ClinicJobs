@@ -1,11 +1,12 @@
 
 import React, { useState, useMemo } from 'react';
-import { Search, MapPin, DollarSign, Calendar, Sparkles, Plus, Image as ImageIcon, Trash2, ChevronRight, Building2, Filter, Save, Bookmark, X, Tag, Lock, CheckCircle2, AlertCircle, Briefcase, Star, FileText, MonitorCheck, Microscope } from 'lucide-react';
+import { Search, MapPin, DollarSign, Calendar, Sparkles, Plus, Image as ImageIcon, Trash2, ChevronRight, Building2, Filter, Save, Bookmark, X, Tag, Lock, CheckCircle2, AlertCircle, Briefcase, Star, FileText, MonitorCheck, Microscope, Banknote, CalendarDays, Percent } from 'lucide-react';
 import { Job, PortfolioItem, Region, WorkExperience } from '../types';
 import { optimizeBio } from '../services/geminiService';
 
 interface FilterableJob extends Job {
   minSalaryValue: number;
+  payType: 'fixo' | 'diaria' | 'comissao';
 }
 
 const MOCK_JOBS: FilterableJob[] = [
@@ -19,9 +20,40 @@ const MOCK_JOBS: FilterableJob[] = [
     region: 'Zona Sul',
     salaryRange: 'R$ 8.000 - R$ 12.000',
     minSalaryValue: 8000,
+    payType: 'fixo',
     description: 'Buscamos profissional com experiência em Invisalign e aparelhos autoligados.',
     type: 'PJ',
     postedAt: 'Há 2 dias'
+  },
+  {
+    id: '2',
+    clinicId: 'c2',
+    clinicName: 'Sorriso Clean',
+    title: 'Clínico Geral',
+    specialty: 'Clínico Geral',
+    location: 'Campinas, SP',
+    region: 'Todas',
+    salaryRange: 'R$ 600,00 / diária',
+    minSalaryValue: 600,
+    payType: 'diaria',
+    description: 'Atendimento clínico geral, foco em urgências e avaliações.',
+    type: 'Autônomo',
+    postedAt: 'Há 5 horas'
+  },
+  {
+    id: '3',
+    clinicId: 'c3',
+    clinicName: 'Implant Center',
+    title: 'Especialista em Implantes',
+    specialty: 'Implantodontia',
+    location: 'São Paulo, SP',
+    region: 'Zona Oeste',
+    salaryRange: '40% de comissão',
+    minSalaryValue: 0,
+    payType: 'comissao',
+    description: 'Excelente volume de cirurgias, clínica com infraestrutura de ponta.',
+    type: 'PJ',
+    postedAt: 'Há 1 dia'
   }
 ];
 
@@ -197,9 +229,49 @@ const DentistDashboard: React.FC = () => {
                   </button>
                 </div>
               )}
-              <div className={!completionStats.isComplete ? "opacity-30 pointer-events-none grayscale" : ""}>
-                <div className="bg-white p-8 rounded-[2.5rem] border border-slate-200 text-center">
-                  <p className="text-slate-500 font-bold">Todas as ferramentas liberadas. Comece a buscar agora!</p>
+              <div className={`space-y-6 ${!completionStats.isComplete ? "opacity-30 pointer-events-none grayscale" : ""}`}>
+                <div className="flex flex-col md:flex-row gap-4 mb-8">
+                  <div className="flex-grow relative">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                    <input 
+                      type="text" 
+                      placeholder="Buscar por especialidade ou clínica..." 
+                      className="w-full p-4 pl-12 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-4 focus:ring-sky-500/10 font-medium shadow-sm"
+                    />
+                  </div>
+                  <button className="px-6 py-4 bg-white border border-slate-200 rounded-2xl font-bold text-slate-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-2 shadow-sm">
+                    <Filter className="w-5 h-5" /> Filtros
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 gap-6">
+                  {MOCK_JOBS.map(job => (
+                    <div key={job.id} className="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm hover:shadow-xl hover:shadow-sky-100 transition-all flex flex-col md:flex-row gap-8 items-start md:items-center group">
+                       <div className="w-16 h-16 bg-sky-50 rounded-2xl flex items-center justify-center shrink-0 border border-sky-100 group-hover:bg-sky-600 group-hover:text-white transition-all">
+                         <Building2 className="w-8 h-8" />
+                       </div>
+                       <div className="flex-grow space-y-2">
+                         <div className="flex flex-wrap items-center gap-2">
+                            <h4 className="text-xl font-black text-slate-900">{job.title}</h4>
+                            <span className="px-3 py-1 bg-sky-100 text-sky-700 text-[10px] font-black uppercase tracking-widest rounded-full">{job.type}</span>
+                         </div>
+                         <p className="text-slate-500 font-bold text-sm">{job.clinicName}</p>
+                         <div className="flex flex-wrap gap-4 pt-2">
+                           <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400">
+                             <MapPin className="w-4 h-4 text-sky-500" /> {job.location} ({job.region})
+                           </div>
+                           <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400">
+                             {job.payType === 'diaria' ? <CalendarDays className="w-4 h-4 text-sky-500" /> : job.payType === 'comissao' ? <Percent className="w-4 h-4 text-sky-500" /> : <Banknote className="w-4 h-4 text-sky-500" />}
+                             <span className="text-slate-900">{job.salaryRange}</span>
+                           </div>
+                         </div>
+                       </div>
+                       <div className="flex gap-3 w-full md:w-auto">
+                         <button className="flex-grow md:flex-none px-8 py-4 bg-sky-600 text-white font-bold rounded-2xl hover:bg-sky-700 transition-all shadow-lg shadow-sky-100">Candidatar-se</button>
+                         <button className="p-4 bg-slate-50 text-slate-400 rounded-2xl hover:bg-sky-50 hover:text-sky-600 transition-all"><Bookmark className="w-5 h-5" /></button>
+                       </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
