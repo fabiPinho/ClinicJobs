@@ -131,7 +131,7 @@ const LandingPage: React.FC = () => {
           <div className="max-w-xl mx-auto bg-sky-50 p-6 rounded-[2rem] border border-sky-100 mb-8">
             <p className="text-sky-800 font-bold text-lg leading-relaxed">
               <Sparkles className="inline-block w-5 h-5 mb-1 mr-2 text-sky-600" aria-hidden="true" />
-              Por apenas <span className="text-2xl text-sky-600 font-black">R$50,00</span> nos próximos 3 meses, você tem acesso à plataforma e a vizualização de todos os participantes , se destacando em um mercado competitivo.
+              Por apenas <span className="text-2xl text-sky-600 font-black">R$50,00</span> nos próximos 3 meses, você tem acesso à plataforma e a visualização de todos os participantes , se destacando em um mercado competitivo.
             </p>
           </div>
 
