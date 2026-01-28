@@ -1,65 +1,118 @@
 
-import React from 'react';
-import { CheckCircle, Users, Building, ShieldCheck, ArrowRight, Sparkles, CreditCard, Star, Search, UserCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { CheckCircle, Users, Building, ShieldCheck, ArrowRight, Sparkles, CreditCard, Star, Search, UserCheck, X, User, Briefcase, GraduationCap } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const LandingPage: React.FC = () => {
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChoice = (type: 'dentist' | 'clinic') => {
+    setShowRegisterModal(false);
+    // Dispara o login simulado no App.tsx através dos botões da navbar
+    const navButtons = document.querySelectorAll('nav button');
+    if (type === 'dentist' && navButtons[0]) (navButtons[0] as HTMLButtonElement).click();
+    if (type === 'clinic' && navButtons[1]) (navButtons[1] as HTMLButtonElement).click();
+  };
+
   return (
     <div className="animate-in fade-in duration-1000">
+      {/* Registration Choice Modal */}
+      {showRegisterModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="bg-white w-full max-w-2xl rounded-[3rem] shadow-2xl overflow-hidden p-8 md:p-12 relative animate-in zoom-in-95 duration-300 border border-white/20">
+            <button 
+              onClick={() => setShowRegisterModal(false)}
+              className="absolute top-6 right-6 p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-all"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            
+            <div className="text-center mb-10">
+              <span className="inline-block px-3 py-1 rounded-full bg-sky-100 text-sky-700 text-[10px] font-bold uppercase tracking-widest mb-4">Escolha seu Perfil</span>
+              <h2 className="text-3xl font-extrabold text-slate-900 mb-2">Bem-vindo ao ClinicJobs</h2>
+              <p className="text-slate-500 font-medium">Selecione uma das opções abaixo para realizar seu cadastro.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <button 
+                onClick={() => handleChoice('dentist')}
+                className="group p-8 bg-slate-50 border-2 border-transparent hover:border-sky-500 hover:bg-white rounded-[2rem] transition-all text-left flex flex-col items-start gap-4 shadow-sm hover:shadow-xl hover:shadow-sky-100"
+              >
+                <div className="w-14 h-14 bg-sky-100 text-sky-600 rounded-2xl flex items-center justify-center group-hover:bg-sky-600 group-hover:text-white transition-all shadow-inner">
+                  <GraduationCap className="w-8 h-8" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-sky-600 transition-colors">Cadastro de Dentista</h3>
+                  <p className="text-sm text-slate-500 font-medium mt-2 leading-relaxed">Publique seu portfólio visual, receba propostas e gerencie sua carreira em um só lugar.</p>
+                </div>
+                <div className="mt-4 flex items-center gap-2 text-sky-600 font-bold text-sm">
+                  Quero Vagas <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </button>
+
+              <button 
+                onClick={() => handleChoice('clinic')}
+                className="group p-8 bg-slate-50 border-2 border-transparent hover:border-sky-500 hover:bg-white rounded-[2rem] transition-all text-left flex flex-col items-start gap-4 shadow-sm hover:shadow-xl hover:shadow-sky-100"
+              >
+                <div className="w-14 h-14 bg-sky-100 text-sky-600 rounded-2xl flex items-center justify-center group-hover:bg-sky-600 group-hover:text-white transition-all shadow-inner">
+                  <Briefcase className="w-8 h-8" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-sky-600 transition-colors">Cadastro de Clínica</h3>
+                  <p className="text-sm text-slate-500 font-medium mt-2 leading-relaxed">Exiba sua infraestrutura, fotos do consultório e encontre os melhores profissionais.</p>
+                </div>
+                <div className="mt-4 flex items-center gap-2 text-sky-600 font-bold text-sm">
+                  Quero Contratar <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section */}
       <section className="relative bg-white pt-24 pb-32 overflow-hidden">
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-[600px] h-[600px] bg-sky-50 rounded-full blur-[120px] opacity-60"></div>
-        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-[500px] h-[500px] bg-cyan-50 rounded-full blur-[100px] opacity-60"></div>
-        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
             <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-100 text-sky-700 text-xs font-bold uppercase tracking-wider mb-8">
                 <Sparkles className="w-3.5 h-3.5" />
-                Novidade: Otimização de Bio com IA
+                O único site de empregos em odontologia com IA
               </div>
-              <h1 className="text-5xl tracking-tight font-extrabold text-slate-900 sm:text-6xl md:text-7xl mb-8 leading-[1.1]">
+              <h1 className="text-5xl tracking-tight font-extrabold text-slate-900 sm:text-6xl md:text-7xl mb-6 leading-[1.1]">
                 O próximo passo da sua <span className="text-sky-600">carreira clínica.</span>
               </h1>
+              <div className="mb-8 p-4 bg-sky-50 rounded-2xl border border-sky-100 inline-block animate-pulse-slow">
+                <p className="text-sky-800 font-bold text-sm md:text-base leading-relaxed flex items-center gap-2">
+                   <Sparkles className="w-5 h-5 text-sky-500 shrink-0" />
+                   O único site de empregos em odontologia com ferramentas de IA para você sair na frente para se destacar.
+                </p>
+              </div>
               <p className="mt-3 text-lg text-slate-500 sm:mt-5 sm:text-xl leading-relaxed">
                 Conectamos cirurgiões-dentistas talentosos às clínicas mais prestigiadas do país. Crie um portfólio visual impactante e seja descoberto hoje.
               </p>
               <div className="mt-10 sm:flex sm:justify-center lg:justify-start gap-5">
-                <button className="flex items-center justify-center px-10 py-4 border border-transparent text-lg font-bold rounded-2xl text-white bg-sky-600 hover:bg-sky-700 shadow-xl shadow-sky-200 transition-all hover:-translate-y-1">
+                <button 
+                  onClick={() => setShowRegisterModal(true)}
+                  className="flex items-center justify-center px-10 py-4 border border-transparent text-lg font-bold rounded-2xl text-white bg-sky-600 hover:bg-sky-700 shadow-xl shadow-sky-200 transition-all hover:-translate-y-1"
+                >
                   Encontrar Vagas <ArrowRight className="ml-2 w-5 h-5" />
                 </button>
-                <button className="flex items-center justify-center px-10 py-4 border-2 border-slate-200 text-lg font-bold rounded-2xl text-slate-700 bg-white hover:bg-slate-50 transition-all hover:border-sky-200">
+                <button 
+                  onClick={() => handleChoice('clinic')}
+                  className="flex items-center justify-center px-10 py-4 border-2 border-slate-200 text-lg font-bold rounded-2xl text-slate-700 bg-white hover:bg-slate-50 transition-all hover:border-sky-200"
+                >
                   Cadastrar Clínica
                 </button>
               </div>
-              <div className="mt-12 flex items-center gap-6 text-sm text-slate-500 font-medium">
-                <div className="flex -space-x-3">
-                  {[1,2,3,4,5].map(i => (
-                    <img key={i} src={`https://i.pravatar.cc/150?u=${i*10}`} className="w-10 h-10 rounded-full border-2 border-white ring-2 ring-sky-50" alt="Profissional" />
-                  ))}
-                </div>
-                <span>Junte-se a <span className="text-slate-900 font-bold">+5.000</span> dentistas</span>
-              </div>
             </div>
-            <div className="mt-16 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
-              <div className="relative mx-auto w-full group">
-                <div className="absolute inset-0 bg-sky-600 rounded-[3rem] blur-3xl opacity-10 group-hover:opacity-20 transition-opacity"></div>
-                <div className="relative rounded-[2.5rem] shadow-2xl overflow-hidden ring-8 ring-white/50 border border-slate-200 aspect-[4/3]">
-                  <img
-                    className="w-full h-full object-cover float"
-                    src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=1200"
-                    alt="Consultório Odontológico Moderno"
-                  />
-                  <div className="absolute bottom-6 left-6 right-6 p-6 glass rounded-2xl border border-white/40 shadow-xl">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-sky-600 flex items-center justify-center text-white font-bold">OJ</div>
-                      <div>
-                        <p className="font-bold text-slate-900">Odonto Joy</p>
-                        <p className="text-xs text-slate-500 font-medium">Buscando Especialista em Estética</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="mt-16 relative lg:col-span-6">
+              <img
+                className="w-full h-full object-cover rounded-[2.5rem] shadow-2xl float"
+                src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=1200"
+                alt="Consultório Moderno"
+              />
             </div>
           </div>
         </div>
@@ -71,116 +124,39 @@ const LandingPage: React.FC = () => {
           <div className="text-center mb-16">
             <h2 className="text-sky-600 font-bold tracking-widest uppercase text-sm mb-4">Simplicidade & Transparência</h2>
             <p className="text-4xl font-extrabold text-slate-900 tracking-tight mb-6">Como funciona o ClinicJobs?</p>
-            <p className="text-slate-500 max-w-2xl mx-auto font-medium text-lg leading-relaxed">
-              Eliminamos burocracia e intermediários. Mostramos portfólio dos candidatos e fotos das clínicas para melhor decisão.
+            <p className="text-slate-500 max-w-3xl mx-auto font-medium text-lg leading-relaxed">
+              Trazemos transparência, segurança e profissionalismo nos processos eliminando grupos de whatsapp, burocracia e intermediários. Mostramos portfólios de clínicas e candidatos para a melhor decisão.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
-            {/* Step 1 */}
-            <div className="relative flex flex-col items-center text-center group">
-              <div className="w-20 h-20 bg-sky-50 text-sky-600 rounded-3xl flex items-center justify-center mb-8 group-hover:bg-sky-600 group-hover:text-white transition-all shadow-sm relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="flex flex-col items-center text-center group">
+              <div className="w-20 h-20 bg-sky-50 text-sky-600 rounded-3xl flex items-center justify-center mb-8 group-hover:bg-sky-600 group-hover:text-white transition-all shadow-sm">
                 <Search className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">1. Cadastro e Filtro</h3>
-              <p className="text-slate-500 font-medium leading-relaxed">
-                Profissionais criam portfólios e clínicas anunciam vagas com detalhes da infraestrutura.
+              <h3 className="text-xl font-bold text-slate-900 mb-4">1. Perfil Completo</h3>
+              <p className="text-slate-500 font-medium">
+                Dentistas criam portfólios visuais e clínicas detalham infraestrutura e remuneração.
               </p>
-              <div className="hidden md:block absolute top-10 left-1/2 w-full h-[2px] bg-slate-100 -z-0"></div>
             </div>
-
-            {/* Step 2 */}
-            <div className="relative flex flex-col items-center text-center group">
-              <div className="w-20 h-20 bg-sky-50 text-sky-600 rounded-3xl flex items-center justify-center mb-8 group-hover:bg-sky-600 group-hover:text-white transition-all shadow-sm relative z-10">
+            <div className="flex flex-col items-center text-center group">
+              <div className="w-20 h-20 bg-sky-50 text-sky-600 rounded-3xl flex items-center justify-center mb-8 group-hover:bg-sky-600 group-hover:text-white transition-all shadow-sm">
                 <UserCheck className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">2. Match & Contato</h3>
-              <p className="text-slate-500 font-medium leading-relaxed">
-                Nossa IA sugere conexões ideais. Quando o interesse é mútuo, o contato é liberado para entrevista.
+              <h3 className="text-xl font-bold text-slate-900 mb-4">2. Match Inteligente</h3>
+              <p className="text-slate-500 font-medium">
+                Nossa plataforma analisa especialidades e perfis para sugerir conexões ideais.
               </p>
-              <div className="hidden md:block absolute top-10 left-1/2 w-full h-[2px] bg-slate-100 -z-0"></div>
             </div>
-
-            {/* Step 3 */}
-            <div className="relative flex flex-col items-center text-center group">
-              <div className="w-20 h-20 bg-sky-600 text-white rounded-3xl flex items-center justify-center mb-8 transition-all shadow-lg shadow-sky-200 relative z-10">
+            <div className="flex flex-col items-center text-center group">
+              <div className="w-20 h-20 bg-sky-600 text-white rounded-3xl flex items-center justify-center mb-8 shadow-lg shadow-sky-200">
                 <CheckCircle className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">3. Ativação Final</h3>
-              <p className="text-slate-500 font-medium leading-relaxed">
-                Após a aprovação do cadastro, é cobrada uma taxa de ativação para liberação total do perfil.
+              <h3 className="text-xl font-bold text-slate-900 mb-4">3. Contratação Direta</h3>
+              <p className="text-slate-500 font-medium">
+                Agende entrevistas e feche parcerias sem intermediários ou taxas por faturamento.
               </p>
             </div>
-          </div>
-
-          {/* Pricing Card */}
-          <div className="mt-20 max-w-4xl mx-auto">
-            <div className="bg-slate-900 rounded-[3rem] p-10 md:p-16 relative overflow-hidden shadow-2xl">
-              <div className="absolute top-0 right-0 p-8">
-                <CreditCard className="w-16 h-16 text-sky-500/20" />
-              </div>
-              <div className="flex flex-col md:flex-row items-center gap-10 relative z-10">
-                <div className="flex-grow">
-                  <span className="inline-block px-4 py-1 rounded-full bg-sky-500/10 text-sky-400 text-xs font-bold uppercase tracking-widest mb-4">Taxa Única de Sucesso</span>
-                  <h3 className="text-3xl font-extrabold text-white mb-4">Investimento fixo, <br/>sem surpresas.</h3>
-                  <p className="text-slate-400 font-medium leading-relaxed text-lg">
-                    Diferente de agências tradicionais, cobramos apenas uma vez pela ativação da conta. Sem mensalidades, sem comissões sobre seu faturamento.
-                  </p>
-                </div>
-                <div className="shrink-0 text-center bg-white/5 p-10 rounded-[2.5rem] border border-white/10 backdrop-blur-sm">
-                  <p className="text-slate-400 text-sm font-bold uppercase tracking-widest mb-2">Valor de Ativação</p>
-                  <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-white text-2xl font-bold">R$</span>
-                    <span className="text-white text-6xl font-extrabold tracking-tight">150</span>
-                    <span className="text-sky-500 text-2xl font-bold">,00</span>
-                  </div>
-                  <p className="text-sky-500 font-bold text-sm mt-4 italic">Taxa Única de Acesso</p>
-                  <p className="text-slate-500 text-[10px] mt-2 font-medium uppercase tracking-tighter">Válido para Dentistas e Clínicas</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-32 bg-[#f8fafc]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-20">
-          <h2 className="text-sky-600 font-bold tracking-widest uppercase text-sm mb-4">Diferenciais</h2>
-          <p className="text-4xl font-extrabold text-slate-900 sm:text-5xl tracking-tight">
-            Desenhado para a excelência clínica
-          </p>
-        </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="p-10 rounded-[2.5rem] bg-white hover:shadow-2xl hover:shadow-sky-100 transition-all border border-slate-100 group relative overflow-hidden">
-            <div className="absolute top-0 right-0 -mr-4 -mt-4 w-24 h-24 bg-sky-50 rounded-full opacity-50 group-hover:scale-150 transition-transform"></div>
-            <div className="w-16 h-16 bg-sky-100 text-sky-600 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-sky-600 group-hover:text-white transition-all shadow-sm">
-              <Users className="w-8 h-8" />
-            </div>
-            <h3 className="text-2xl font-bold text-slate-900 mb-4 tracking-tight">Portfólio Visual</h3>
-            <p className="text-slate-500 leading-relaxed font-medium">
-              Suas habilidades merecem visibilidade. Poste seus melhores casos, fotos clínicas e certificações em um feed profissional.
-            </p>
-          </div>
-          <div className="p-10 rounded-[2.5rem] bg-white hover:shadow-2xl hover:shadow-sky-100 transition-all border border-slate-100 group relative overflow-hidden">
-            <div className="absolute top-0 right-0 -mr-4 -mt-4 w-24 h-24 bg-cyan-50 rounded-full opacity-50 group-hover:scale-150 transition-transform"></div>
-            <div className="w-16 h-16 bg-cyan-100 text-cyan-600 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-cyan-600 group-hover:text-white transition-all shadow-sm">
-              <Building className="w-8 h-8" />
-            </div>
-            <h3 className="text-2xl font-bold text-slate-900 mb-4 tracking-tight">Vagas Inteligentes</h3>
-            <p className="text-slate-500 leading-relaxed font-medium">
-              Filtre por infraestrutura, equipamentos (Laser, Scanner 3D, Microscópio) e regime de contratação ideal.
-            </p>
-          </div>
-          <div className="p-10 rounded-[2.5rem] bg-white hover:shadow-2xl hover:shadow-sky-100 transition-all border border-slate-100 group relative overflow-hidden">
-            <div className="absolute top-0 right-0 -mr-4 -mt-4 w-24 h-24 bg-indigo-50 rounded-full opacity-50 group-hover:scale-150 transition-transform"></div>
-            <div className="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm">
-              <ShieldCheck className="w-8 h-8" />
-            </div>
-            <h3 className="text-2xl font-bold text-slate-900 mb-4 tracking-tight">Match com IA</h3>
-            <p className="text-slate-500 leading-relaxed font-medium">
-              Nossa inteligência artificial analisa seu CRO e portfólio para sugerir as clínicas que combinam com seu perfil técnico.
-            </p>
           </div>
         </div>
       </section>

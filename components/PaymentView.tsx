@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { CreditCard, QrCode, ShieldCheck, CheckCircle2, Copy, ArrowRight, Loader2 } from 'lucide-react';
+import { CreditCard, QrCode, ShieldCheck, CheckCircle2, Copy, ArrowRight, Loader2, Sparkles } from 'lucide-react';
 
 interface PaymentViewProps {
   userType: 'dentist' | 'clinic';
@@ -42,12 +42,18 @@ const PaymentView: React.FC<PaymentViewProps> = ({ userType, onPaymentSuccess })
   return (
     <div className="max-w-4xl mx-auto px-4 py-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="text-center mb-12">
-        <span className="inline-block px-4 py-1 rounded-full bg-sky-100 text-sky-700 text-xs font-bold uppercase tracking-widest mb-4">Ativação de Perfil</span>
+        <span className="inline-block px-4 py-1 rounded-full bg-sky-100 text-sky-700 text-xs font-bold uppercase tracking-widest mb-4">Oferta de Lançamento</span>
         <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
           Finalize sua <span className="text-sky-600">inscrição</span>
         </h1>
+        <div className="max-w-xl mx-auto bg-sky-50 p-6 rounded-[2rem] border border-sky-100 mb-8">
+          <p className="text-sky-800 font-bold text-lg leading-relaxed">
+            <Sparkles className="inline-block w-5 h-5 mb-1 mr-2 text-sky-600" />
+            Por apenas <span className="text-2xl text-sky-600 font-black">R$ 50,00</span> nos próximos 3 meses, você tem acesso à plataforma e à visualização de todos os participantes se destacando em um mercado muito competitivo.
+          </p>
+        </div>
         <p className="text-slate-500 font-medium max-w-lg mx-auto leading-relaxed">
-          Para liberar seu acesso vitalício à plataforma e ser visto por {userType === 'dentist' ? 'centenas de clínicas' : 'milhares de talentos'}, realize o pagamento único da taxa de ativação.
+          Para ser visto por {userType === 'dentist' ? 'centenas de clínicas' : 'milhares de talentos'}, realize o pagamento único da taxa de ativação promocional.
         </p>
       </div>
 
@@ -124,19 +130,19 @@ const PaymentView: React.FC<PaymentViewProps> = ({ userType, onPaymentSuccess })
 
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-slate-900 rounded-[2.5rem] p-8 text-white shadow-xl">
-            <h3 className="text-xl font-bold mb-6">Resumo da Ativação</h3>
+            <h3 className="text-xl font-bold mb-6">Resumo do Plano</h3>
             <div className="space-y-4 mb-8">
               <div className="flex justify-between items-center text-slate-400 text-sm font-medium">
-                <span>Taxa Única de Acesso</span>
-                <span className="text-white">R$ 150,00</span>
+                <span>Taxa de Ativação Promo</span>
+                <span className="text-white">R$ 50,00</span>
               </div>
               <div className="flex justify-between items-center text-slate-400 text-sm font-medium">
-                <span>Manutenção de Perfil</span>
-                <span className="text-sky-400 font-bold uppercase text-[10px]">Grátis</span>
+                <span>Duração do Acesso</span>
+                <span className="text-sky-400 font-bold uppercase text-[10px]">3 MESES</span>
               </div>
               <div className="pt-4 border-t border-white/10 flex justify-between items-center">
                 <span className="font-bold">Total a pagar</span>
-                <span className="text-2xl font-extrabold">R$ 150,00</span>
+                <span className="text-2xl font-extrabold text-sky-400">R$ 50,00</span>
               </div>
             </div>
 
@@ -167,10 +173,10 @@ const PaymentView: React.FC<PaymentViewProps> = ({ userType, onPaymentSuccess })
             <ul className="space-y-3">
               {[
                 'Acesso a todas as vagas do país',
+                'Visualização de portfólios',
                 'IA para otimização de perfil',
-                'Exibição de portfólio visual',
                 'Chat direto com contratantes',
-                'Suporte prioritário 24/7'
+                'Destaque no mercado odontológico'
               ].map((text, i) => (
                 <li key={i} className="flex items-start gap-2 text-xs text-slate-500 font-medium">
                   <CheckCircle2 className="w-4 h-4 text-sky-500 shrink-0" />

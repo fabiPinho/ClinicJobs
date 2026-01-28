@@ -10,6 +10,22 @@ export interface PortfolioItem {
   imageUrl: string;
 }
 
+export interface WorkExperience {
+  id: string;
+  clinicName: string;
+  role: string;
+  period: string;
+  description: string;
+}
+
+export interface Review {
+  id: string;
+  clinicName: string;
+  rating: number;
+  comment: string;
+  date: string;
+}
+
 export interface Job {
   id: string;
   clinicId: string;
@@ -41,6 +57,8 @@ export interface DentistProfile {
   cro: string;
   avatar: string;
   portfolio: PortfolioItem[];
+  experiences: WorkExperience[];
+  reviews: Review[];
   experienceYears: number;
 }
 
