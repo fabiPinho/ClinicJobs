@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { CheckCircle, Users, Building, ShieldCheck, ArrowRight, Sparkles, CreditCard, Star, Search, UserCheck, X, User, Briefcase, GraduationCap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -126,6 +125,13 @@ const LandingPage: React.FC = () => {
             <p className="text-4xl font-extrabold text-slate-900 tracking-tight mb-6">Como funciona o ClinicJobs?</p>
             <p className="text-slate-500 max-w-3xl mx-auto font-medium text-lg leading-relaxed">
               Trazemos transparência, segurança e profissionalismo nos processos eliminando grupos de whatsapp, burocracia e intermediários. Mostramos portfólios de clínicas e candidatos para a melhor decisão.
+            </p>
+          </div>
+          {/* Use proper React className and Lucide components instead of raw HTML class and SVG */}
+          <div className="max-w-xl mx-auto bg-sky-50 p-6 rounded-[2rem] border border-sky-100 mb-8">
+            <p className="text-sky-800 font-bold text-lg leading-relaxed">
+              <Sparkles className="inline-block w-5 h-5 mb-1 mr-2 text-sky-600" aria-hidden="true" />
+              Por apenas <span className="text-2xl text-sky-600 font-black">R$ 50,00</span> nos próximos 3 meses, você tem acesso à plataforma e à visualização de todos os participantes se destacando em um mercado muito competitivo.
             </p>
           </div>
 
